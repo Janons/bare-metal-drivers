@@ -13,11 +13,13 @@
 
 
 void USART_PeriClockControl(USART_RegDef_t *pUSARTx, uint8_t EnorDi){ 
+
     
-    
+
+    //activate all the others later on
     if (EnorDi){
         if (pUSARTx == "USART1")  RCC-> APB2ENR |= BIT(4); //activate USART1
-        if (pUSARTx == "USART1")  RCC-> APB2ENR |= BIT(5);
+        if (pUSARTx == "USART6")  RCC-> APB2ENR |= BIT(5);
 
     }
 
@@ -25,9 +27,40 @@ void USART_PeriClockControl(USART_RegDef_t *pUSARTx, uint8_t EnorDi){
 
     if (!EnorDi){
         if (pUSARTx == "USART1")  RCC-> APB2ENR |= ~BIT(4); //activate USART1
-        if (pUSARTx == "USART1")  RCC-> APB2ENR |= ~BIT(5);
+        if (pUSARTx == "USART6")  RCC-> APB2ENR |= ~BIT(5);
 
     }
+
+
+}
+
+
+
+
+void USART_Init(USART_Handle_t *pUSARTHandle){
+
+    //Temporary variable
+	uint32_t tempreg=0;// we use this to make a simpler configuration
+
+
+
+    /*Configuarion of CR1*/
+
+    //Implement the code to enable the Clock for given USART peripheral
+    USART_PeriClockControl(&(pUSARTHandle->pUSARTx),1);
+
+
+    //Enable the usart by using the control register
+    pUSARTHandle->pUSARTx->CR1 |= BIT(13); 
+
+
+    //Enable USART Tx and Rx engines according to the USART_Mode configuration item
+
+    
+
+    //Define the word lenght
+    tempreg |= pUSARTHandle->USART_Config.USART_WordLength = BIT(12);
+
 
 
 }
