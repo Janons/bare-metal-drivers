@@ -9,7 +9,7 @@
 #define PINBANK(pin) (pin >> 8)
 
 #define ENABLE 1
-#define ENABLE 0
+#define DISABLE 0
 
 
 void USART_PeriClockControl(USART_RegDef_t *pUSARTx, uint8_t EnorDi){ 
@@ -55,12 +55,43 @@ void USART_Init(USART_Handle_t *pUSARTHandle){
 
 
     //Enable USART Tx and Rx engines according to the USART_Mode configuration item
+   if ( pUSARTHandle->USART_Config.USART_Mode == USART_MODE_ONLY_RX){
+
+        tempreg |= BIT(3);
+   }
+
+
+    //Enable USART Tx and Rx engines according to the USART_Mode configuration item
+   if ( pUSARTHandle->USART_Config.USART_Mode == USART_MODE_ONLY_TX){
+
+        tempreg |= BIT(2);
+   }
+
+
+     //Enable USART Tx and Rx engines according to the USART_Mode configuration item
+   if ( pUSARTHandle->USART_Config.USART_Mode == USART_MODE_ONLY_TX){
+
+    tempreg |= BIT(2) & BIT(3);
+
+   }
+
+
 
     
 
     //Define the word lenght
-    tempreg |= pUSARTHandle->USART_Config.USART_WordLength = BIT(12);
+    tempreg |= pUSARTHandle->USART_Config.USART_WordLength << 12;
 
+
+
+     /*Configuarion of CR2*/
+
+
+
+
+
+
+     /*BAUD RATE*/
 
 
 }
